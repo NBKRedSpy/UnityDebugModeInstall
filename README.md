@@ -72,7 +72,7 @@ Open the .csproj file in Visual Studio and compile it in debug mode. Copy the .d
 Open ILSpy and find the game's .dll
 
 Make sure to right click the .dll and click "Load Dependencies" before decompiling.
-![Load Dependencies](media\LoadDependencies.png)
+![Load Dependencies](media/LoadDependencies.png)
 
 Then use the menu to "Save Code", which will ask for a directory.  The file will be a .csproj file and the directory will contain all the code.
 
