@@ -1,6 +1,6 @@
 
 # Unity Debugging
-This is my personal notes of how to get Unity Debugging to work.
+These are my personal notes of how to get Unity Debugging to work.
 
 The commonly suggested doc is the dnSpy version [here](https://github.com/dnSpy/dnSpy), but it talks about mono and hacked builds, which is not longer correct.
 
