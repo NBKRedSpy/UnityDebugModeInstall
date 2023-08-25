@@ -13,7 +13,7 @@ Note - I believe that there is an issue where one of the .dll's aren't installed
 ## Find the Unity Version
 * Go to the .exe for the game and go to properties.
 
-![](/media/Pasted image 20230804163009.png|400) 
+![](./media/GamesEditorVersion.png) 
 
 * Install the Unity Editor for that version.  Note, the "Unity Hub" is the app that has to be installed.  When that app is run, there are options to install the editors.
 	* https://learn.unity.com/tutorial/install-the-unity-hub-and-editor#
@@ -48,9 +48,6 @@ player-connection-debug=1
 player-connection-wait-timeout=-1
 wait-for-managed-debugger=0
 ```
-**todo:**
-Test only setting the debug.  Some docs say that is the only required line, but I think that didn't work for me previously.
-
 
 ### Wait for debugger at start
 
@@ -65,9 +62,21 @@ This is useful if the code is at the very start of the game.
 Decompile the game's .DLL (Usually `Assembly-CSharp.dll` in the Game's `/*Data/Managed/` folder).
 ILSpy is probably the best tool for this.
 
-Compile it as debug and copy the .dll and the .pdb to the Managed folder.
+If you have winget, the package is ``icsharpcode.ILSpy``
 
-# Attach Debbuger
+Otherwise, the offical page is [here](https://github.com/icsharpcode/ILSpy)
+
+Open the .csproj file in Visual Studio and compile it in debug mode. Copy the .dll and the .pdb to the game's Managed directory and overwrite the .dll.
+
+# Using ILSpy to decompile the .dll
+Open ILSpy and find the game's .dll
+
+Make sure to right click the .dll and click "Load Dependencies" before decompiling.
+![Load Dependencies](media\LoadDependencies.png)
+
+Then use the menu to "Save Code", which will ask for a directory.  The file will be a .csproj file and the directory will contain all the code.
+
+# Attach Debugger
 
 Run the game.  When the game is running, attach the debugger:
 ![](media/UnityDebuggerAttach.png)
@@ -75,14 +84,14 @@ Run the game.  When the game is running, attach the debugger:
 
 
 There should be an Instance window with an entry in the list:
-![](media/AttachUnity.png.png)
+![](media/AttachUnity.png)
 
 Select the entry and hit ok.
 
 ## In Game indicator
 Also, when in the game (even without attaching the debugger), there should be a "Development Build" indicator in the lower right, and the Dev console on the left.
 
-![](/media/DevelopmentBuildExample.png)
+![](media/DevelopmentBuildExample.png)
 
 
 
@@ -93,6 +102,13 @@ The debugger should break on that point.
 
 ![](/media/DebuggerBreakpointExample.png)
 
+
+# Game Updates
+Every time the game is updated, this install will need to happen again as any changed files will be overwritten by the installer.
+Also, the code for the .dll has to be decompiled since it may have changed.
+
+# Restoring the Game
+To restore the game back to normal, use your game providers "Verify Files" functionality.  
 
 # Issues
 
