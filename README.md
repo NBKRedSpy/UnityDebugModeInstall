@@ -10,6 +10,48 @@ Install Visual Studio with Unity Engine option.
 
 Note - I believe that there is an issue where one of the .dll's aren't installed with VS2022.  I think this is the one that I had to install VS2019 just for that .dll.
 
+
+# BepinEx 
+If the game is using BepinEx and the version is 5.4.23.1 or higher, it is considerably easier to debug.  That BepinEx version uses Doorstop 4.
+
+Otherwise, see [Instructions for Games Without BepinEx or BepinEx Prior to 5.4.23.1](#instructions-for-games-without-bepinex-or-bepinex-prior-to-54231)
+
+## Steps
+
+Recompile and deploy the game's DLL as per the [Game's Debug .dll](#games-debug-dll) section
+
+In the game's root directory, open the doorstop_config.ini and change the debug_enabled to true as shown below.
+```ini
+# If true, Mono debugger server will be enabled
+debug_enabled = true
+```
+
+Run the game.
+
+Visual Studio should still be open from the previous compile.  Place a breakpoint on a line in the code that is expected to be hit. 
+An Update() function is usually called frequently.  
+
+In the Visual Studio menu, go to Debug > Attach Unity Debugger.
+In the "Select Unity Instance" dialog, click the "Input IP" button.
+In the "Custom IP endpoint" dialog, change the IP to 127.0.0.1:10000.  This is the same value as the debug_address in the doorstop_config.ini.
+Click OK.
+
+
+Assuming the line with the breakpoint is invoked, Visual Studio should now break on that breakpoint.
+
+## Stopping Before Game Load.
+Sometimes it is necessary to debug code that is run very early in the game's startup.
+In this case, set debug_suspend to true in the doorstop_config.ini
+
+```ini
+# If true and debug_enabled is true, Mono debugger server will suspend the game execution until a debugger is attached
+debug_suspend = true
+```
+
+Note that when running the game in this mode, it will appear that the game is not running at all.  Once the debugger is attached, the game will proceed as normal.
+
+# Instructions for Games Without BepinEx or BepinEx Prior to 5.4.23.1
+
 ## Find the Unity Version
 * Go to the .exe for the game and go to properties.
 
@@ -57,16 +99,24 @@ to the boot.config
 
 This is useful if the code is at the very start of the game.
 
-# Game's Debug.dll
+# Game's Debug .dll
 
-Decompile the game's .DLL (Usually `Assembly-CSharp.dll` in the Game's `/*Data/Managed/` folder).
-ILSpy is probably the best tool for this.
+Decompile the game's .DLL (Usually `Assembly-CSharp.dll` in the game's `/*Data/Managed/` folder).
+ILSpy is probably the best tool for this. See [Using ILSpy to decompile the .dll](#using-ilspy-to-decompile-the-dll) below for the use.
 
 If you have winget, the package is ``icsharpcode.ILSpy``
 
 Otherwise, the offical page is [here](https://github.com/icsharpcode/ILSpy)
 
-Open the .csproj file in Visual Studio and compile it in debug mode. Copy the .dll and the .pdb to the game's Managed directory and overwrite the .dll.
+Open the .csproj file in Visual Studio and compile it in debug mode. It is common to need to add additional library references to the project during the compile. 
+All the necessary .dll's will be in the Game's `/*Data/Managed/` directory.
+
+The project's .NET target in the project's properties page may also need to set to a higher version.
+
+
+Copy the .dll and the .pdb to the game's Managed directory and overwrite the .dll.
+
+
 
 # Using ILSpy to decompile the .dll
 Open ILSpy and find the game's .dll
